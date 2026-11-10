@@ -1,19 +1,23 @@
 # Live Ops Helpdesk
 
-A real-time support ticket management application developed for RapidDispatch Freight & Logistics.
+A real-time support ticket management application built for RapidDispatch Freight & Logistics. It allows multiple support agents to view, create, edit, and manage tickets while coordinating ticket access through real-time locking.
 
-The application allows multiple support agents to view and manage tickets simultaneously. It uses Socket.io to synchronize ticket updates and prevent multiple agents from editing the same ticket at the same time.
+## Live Demo
+
+- **Frontend:** https://live-ops-helpdesk-kappa.vercel.app/
+- **Backend:** https://live-ops-helpdesk-server-x8h2.onrender.com
+- **GitHub:** https://github.com/gurrampranitha2580-beep/live-ops-helpdesk
 
 ## Features
 
-- Live support ticket dashboard.
-- Real-time ticket creation and updates across connected clients.
-- Ticket locking to prevent simultaneous editing.
-- Displays the agent currently holding a ticket lock.
-- Disables editing for other agents while a ticket is locked.
-- Automatically releases locks after a successful save or when an agent closes the editing panel.
-- Connection-loss notification and automatic reconnection.
-- Agent A and Agent B preview switcher for testing collaboration.
+- Live ticket board displaying support tickets.
+- Real-time ticket creation across connected clients.
+- Ticket locking to prevent multiple agents from editing the same ticket simultaneously.
+- Lock status updates across clients, including agent name and lock indicator.
+- Ticket updates synchronized immediately after saving.
+- Automatic lock release when an agent saves or closes a ticket.
+- Connection status indicator with a reconnection warning.
+- Socket.io-based communication without polling.
 
 ## Tech Stack
 
@@ -22,13 +26,12 @@ The application allows multiple support agents to view and manage tickets simult
 - React
 - TypeScript
 - Tailwind CSS
-- Socket.io-client
+- Socket.io Client
 
 **Backend**
 - Node.js
 - Express
 - Socket.io
-- CORS
 
 ## Project Structure
 
@@ -43,18 +46,17 @@ live-ops-helpdesk/
 │   ├── data/
 │   ├── lib/
 │   └── types/
-├── public/
 ├── Prompts.md
-├── README.md
-└── package.json
+├── package.json
+└── README.md
 ```
 
-## Running the Project Locally
+## Run Locally
 
 ### 1. Clone the repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/gurrampranitha2580-beep/live-ops-helpdesk.git
 cd live-ops-helpdesk
 ```
 
@@ -64,24 +66,7 @@ cd live-ops-helpdesk
 npm install
 ```
 
-### 3. Install backend dependencies
-
-```bash
-cd server
-npm install
-```
-
-### 4. Start the backend
-
-From the `server` directory:
-
-```bash
-npm run dev
-```
-
-The backend runs on port 4000 by default.
-
-### 5. Configure the frontend
+### 3. Configure the frontend
 
 Create a `.env.local` file in the project root:
 
@@ -89,7 +74,17 @@ Create a `.env.local` file in the project root:
 NEXT_PUBLIC_SOCKET_URL=http://localhost:4000
 ```
 
-### 6. Start the frontend
+### 4. Start the backend
+
+Open a separate terminal:
+
+```bash
+cd server
+npm install
+npm run dev
+```
+
+### 5. Start the frontend
 
 Open another terminal in the project root:
 
@@ -97,36 +92,42 @@ Open another terminal in the project root:
 npm run dev
 ```
 
-Open:
-
-http://localhost:3000
-
-## Testing Real-Time Collaboration
-
-Open the application in two separate browser windows.
-
-1. Select Agent A in the first window and Agent B in the second.
-2. Open a ticket as Agent A.
-3. Check that Agent B immediately sees the ticket locked.
-4. Try to edit the same ticket as Agent B.
-5. Save or close the ticket as Agent A.
-6. Verify that Agent B can edit it again.
-7. Create a new ticket and check that it appears in both windows.
+Open http://localhost:3000 in your browser.
 
 ## Environment Variables
 
-| Variable | Purpose |
+**Frontend**
+
+| Variable | Description |
 |---|---|
-| `NEXT_PUBLIC_SOCKET_URL` | Socket.io backend URL used by the frontend |
-| `CLIENT_URL` | Frontend origin allowed by the backend CORS configuration |
-| `PORT` | Backend listening port; defaults to 4000 locally |
+| `NEXT_PUBLIC_SOCKET_URL` | Socket.io backend URL |
 
-## Current Scope and Limitations
+**Backend**
 
-- Ticket and lock data are stored in backend memory and reset when the server restarts.
-- The Agent A / Agent B selector is for demonstration and testing, not production authentication.
-- The application implements the Frontend Track A requirements and does not include the Track B Ghost Disconnect feature.
+| Variable | Description |
+|---|---|
+| `PORT` | Backend server port |
+| `CLIENT_URL` | Allowed frontend origin for CORS |
+
+For local development, the backend defaults to port `4000` and frontend origin `http://localhost:3000`.
+
+## Testing Real-Time Collaboration
+
+1. Open the application in two separate browser windows.
+2. Select Agent A in one window and Agent B in the other.
+3. Open a ticket for editing as Agent A.
+4. Verify that Agent B immediately sees the ticket locked.
+5. Save or close the ticket and verify that the lock is released.
+6. Create a new ticket and verify that it appears in both windows without refreshing.
 
 ## Deployment
 
-Deployment URLs will be added after the frontend and backend are deployed and verified.
+- Frontend deployed on Vercel.
+- Socket.io backend deployed on Render.
+- Production communication uses HTTPS and secure WebSocket connections.
+
+## Current Limitations
+
+- Ticket data and locks are stored in backend memory and are not persistent across server restarts.
+- Agent selection is for demonstration; authentication is not implemented.
+- Automatic lock recovery after an agent disconnects is outside the scope of this frontend track.
